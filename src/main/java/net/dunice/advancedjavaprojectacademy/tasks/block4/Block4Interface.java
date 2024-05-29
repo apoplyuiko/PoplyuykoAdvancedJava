@@ -1,6 +1,6 @@
 package net.dunice.advancedjavaprojectacademy.tasks.block4;
 
-import net.dunice.advanced_java_academy.tasks.Employee;
+import net.dunice.advancedjavaprojectacademy.tasks.Employee;
 
 import java.util.List;
 import java.util.Map;
@@ -14,7 +14,7 @@ import java.util.Map;
 public interface Block4Interface {
 
     /**
-     * Создать 5 различных сотрудника и сделать компараторы на сравнение по зарплате,
+     * Сделать компараторы для сравнения сотрудников по зарплате,
      * возрасту и сроку службы (3 компаратора).
      * */
 
