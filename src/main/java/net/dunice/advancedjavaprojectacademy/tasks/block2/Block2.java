@@ -21,9 +21,17 @@ public class Block2 implements Block2Interface {
 
     @Override
     public Integer countNumber(Integer number) {
-        return Math.toIntExact(IntStream.range(0, number + 1)
-                .filter(i -> Integer.valueOf(i).toString().contains("2"))
-                .count());
+        if (number == null || number < 2) {
+            return 0;
+        }
+        return IntStream.range(0, number + 1)
+                .map(i ->
+                        (int) Integer.valueOf(i)
+                                .toString()
+                                .chars()
+                                .filter(j -> j == '2').count())
+                .filter(i -> i > 0)
+                .reduce(Integer::sum).orElse(0);
     }
 
     @Override
@@ -110,28 +118,45 @@ public class Block2 implements Block2Interface {
 
     @Override
     public String getModifyingString(String noBracketsString) {
-        if (noBracketsString == null || noBracketsString.isEmpty()) {
-            return noBracketsString;
+        if (noBracketsString == null) {
+            return null;
+        } else if (noBracketsString.isEmpty()) {
+            return "()";
+        } else {
+            StringBuilder result = new StringBuilder();
+            String bracket;
+            String input;
+            for (int i = 0; i < noBracketsString.length(); i++) {
+                bracket = i < noBracketsString.length() / 2 + 1 ? "(" : ")";
+                input = (noBracketsString.length() % 2 == 0 && i == noBracketsString.length() / 2) ? ")" : "";
+                result.append(bracket).append(input).append(noBracketsString.charAt(i));
+            }
+            return result + ")";
         }
-        StringBuilder result = new StringBuilder();
-        String bracket;
-        String input;
-        for (int i = 0; i < noBracketsString.length(); i++) {
-            bracket = i < noBracketsString.length() / 2 + 1 ? "(" : ")";
-            input = (noBracketsString.length() % 2 == 0 && i == noBracketsString.length() / 2) ? ")" : "";
-            result.append(bracket).append(input).append(noBracketsString.charAt(i));
-        }
-        return result + ")";
     }
 
     @Override
     public String getValidStringNoSpaces(String string) {
-        return null;
+        if (string == null || string.isEmpty()) {
+            return string;
+        }
+        return Stream.of(string.split(" ")).filter(item -> !Objects.equals(item, "")).collect(Collectors.joining(" "));
     }
 
     @Override
-    public int numberOfIdenticalPairs(int[] nums) {
-        return 0;
+    public int numberOfIdenticalPairs(int[] array) {
+        Map<Integer, Integer> pairs = new HashMap<>();
+        for (int item : array) {
+            var getValue = pairs.getOrDefault(item, 0) + 1;
+            pairs.put(item, getValue);
+        }
+        int count = 0;
+        for (int frequency : pairs.values()) {
+            if (frequency > 1) {
+                count += (frequency * (frequency - 1)) / 2;
+            }
+        }
+        return count;
     }
 }
 
