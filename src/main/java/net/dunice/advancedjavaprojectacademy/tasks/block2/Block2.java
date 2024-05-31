@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 public class Block2 implements Block2Interface {
     @Override
     public <T> Collection<T> getWithoutDublicates(Collection<T> collection) {
-        return collection.stream().distinct().collect(Collectors.toList());
+        return new LinkedHashSet<>(collection);
     }
 
     @Override
@@ -36,6 +36,9 @@ public class Block2 implements Block2Interface {
 
     @Override
     public boolean isPermutationStrings(String str1, String str2) {
+        if (str1 == null || str1.isEmpty() || str2 == null || str2.isEmpty()) {
+            return false;
+        }
         var sizeStr1 = Stream.of(str1.split(" ")).filter(item -> !Objects.equals(item, "")).toList().size();
         var sizeStr2 = Stream.of(str2.split(" ")).filter(item -> !Objects.equals(item, "")).toList().size();
         if (sizeStr1 == sizeStr2) {
@@ -104,11 +107,20 @@ public class Block2 implements Block2Interface {
             return false;
         }
         Stack<Character> stack = new Stack<>();
+
         for (char ch : givenString.toCharArray()) {
-            if (ch == '(') {
-                stack.push(ch);
-            } else if (ch == ')') {
-                if (stack.isEmpty() || stack.pop() != '(') {
+            switch (ch) {
+                case '{', '[', '(' -> stack.push(ch);
+                case '}' -> {
+                    if (stack.isEmpty() || stack.pop() != '{') return false;
+                }
+                case ']' -> {
+                    if (stack.isEmpty() || stack.pop() != '[') return false;
+                }
+                case ')' -> {
+                    if (stack.isEmpty() || stack.pop() != '(') return false;
+                }
+                default -> {
                     return false;
                 }
             }

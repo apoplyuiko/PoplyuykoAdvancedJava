@@ -8,13 +8,12 @@ import java.util.stream.Collectors;
 public class Block4 implements Block4Interface {
     @Override
     public List<Employee> printAndGetListEmployees(Employee... employees) {
-        return Arrays.stream(employees)
-                .peek(item -> System.out.println(
-                        "First name - " + item.firstName() + "\t" +
-                                "Last name - " + item.lastName() + "\t" +
-                                "Salary - " + item.salary() + "\t" +
-                                "Work years - " + item.workYears()))
-                .toList();
+        Arrays.stream(employees).forEach(item -> System.out.println(
+                "First name - " + item.firstName() + "\t" +
+                        "Last name - " + item.lastName() + "\t" +
+                        "Salary - " + item.salary() + "\t" +
+                        "Work years - " + item.workYears()));
+        return Arrays.stream(employees).toList();
     }
 
     @Override
@@ -24,7 +23,9 @@ public class Block4 implements Block4Interface {
 
     @Override
     public Employee getEmployeeMaxSalary(List<Employee> employees) {
-        return employees.stream().sorted(new SalaryComparator()).toList().get(employees.size() - 1);
+        return employees.stream()
+                .max(Comparator.comparingDouble(Employee::salary))
+                .orElse(null);
     }
 
     @Override

@@ -18,8 +18,8 @@ public class Block3 implements Block3Interface {
     public List<Student> getJobList(List<Student> studentList) {
         return studentList.stream()
                 .filter(item ->
-                        (item.sex() == Sex.MAN && item.age() < 60 && item.age() >= 18) ||
-                                (item.sex() == Sex.WOMAN && item.age() < 55 && item.age() >= 18))
+                        (item.sex() == Sex.MAN && item.age() <= 60 && item.age() >= 18) ||
+                                (item.sex() == Sex.WOMAN && item.age() <= 55 && item.age() >= 18))
                 .toList();
     }
 
